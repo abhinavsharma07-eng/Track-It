@@ -1,0 +1,2835 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>AttendX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #08110e;
+      --surface: #111b18;
+      --surface-raised: #0c2a20;
+      --border: #1d2925;
+      --text-primary: #eaf5f0;
+      --text-secondary: #9aa9a3;
+      --text-muted: #71847c;
+      --present: #5cd47c;
+      --present-surface: #103b2b;
+      --absent: #f1a7a2;
+      --absent-surface: #3b2422;
+      --accent-blue: #4db7ff;
+      --warning: #f5a623;
+      --critical: #ff7d70;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #040706;
+      font-family: "Inter", sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 12px;
+    }
+
+    .num {
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    /* ---- phone frame ---- */
+    .device {
+      width: 390px;
+      max-width: 100%;
+      height: 844px;
+      max-height: calc(100vh - 48px);
+      background: var(--bg);
+      border-radius: 40px;
+      border: 1px solid #1c2622;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7);
+    }
+
+    .statusbar {
+      height: 26px;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 20px 100px;
+      scroll-behavior: smooth;
+    }
+
+    .screen::-webkit-scrollbar {
+      display: none;
+    }
+
+    .screen {
+      scrollbar-width: none;
+    }
+
+    /* ---- top bars ---- */
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 10px 0 18px;
+    }
+
+    .topbar h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 26px;
+      margin: 0 0 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .topbar p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* ---- cards ---- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+
+    .card+.card {
+      margin-top: 14px;
+    }
+
+    /* overall card */
+    .overall-card {
+      background: linear-gradient(160deg,
+          var(--surface-raised),
+          var(--surface) 70%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+    }
+
+    .overall-label {
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .overall-pct {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 52px;
+      font-weight: 600;
+      line-height: 1.05;
+      margin: 6px 0 4px;
+    }
+
+    .overall-sub {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .pill-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pill.ok {
+      background: var(--present-surface);
+      color: var(--present);
+    }
+
+    .pill.warn {
+      background: #3a2c12;
+      color: var(--warning);
+    }
+
+    .pill.crit {
+      background: var(--absent-surface);
+      color: var(--critical);
+    }
+
+    .pill.info {
+      background: #132a38;
+      color: var(--accent-blue);
+    }
+
+    /* section headers */
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 26px 0 12px;
+    }
+
+    .section-head h2 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .section-head span {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* subject card (home) */
+    .subject-card {
+      margin-bottom: 12px;
+    }
+
+    .subject-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .subject-name {
+      font-size: 15.5px;
+      font-weight: 600;
+      margin: 0 0 2px;
+    }
+
+    .subject-meta {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .subject-pct {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .progress {
+      height: 6px;
+      background: #1a2521;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 12px 0 12px;
+    }
+
+    .progress>div {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--present);
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .status-tag.none {
+      color: var(--text-secondary);
+    }
+
+    .status-tag.present {
+      color: var(--present);
+    }
+
+    .status-tag.absent {
+      color: var(--absent);
+    }
+
+    .insight {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      border: none;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-present {
+      background: var(--present-surface);
+      color: var(--present);
+    }
+
+    .btn-absent {
+      background: var(--absent-surface);
+      color: var(--absent);
+    }
+
+    .btn-undo {
+      background: var(--surface-raised);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      background: var(--present);
+      color: #04140c;
+      font-weight: 700;
+    }
+
+    .btn-secondary {
+      background: var(--surface-raised);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      padding: 13px;
+      font-size: 14.5px;
+      border-radius: var(--radius-md);
+    }
+
+    .btn-danger {
+      background: var(--absent-surface);
+      color: var(--critical);
+    }
+
+    /* bottom nav */
+    .bottomnav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 78px;
+      background: rgba(8, 17, 14, 0.92);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding-bottom: 16px;
+    }
+
+    .navitem {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 10.5px;
+      font-weight: 600;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+
+    .navitem svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .navitem.active {
+      color: var(--present);
+    }
+
+    /* today screen */
+    .timeline-item {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-rail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 16px;
+      flex: 0 0 auto;
+      padding-top: 6px;
+    }
+
+    .timeline-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .timeline-dot.now {
+      background: var(--present);
+      box-shadow: 0 0 0 4px var(--present-surface);
+    }
+
+    .timeline-dot.done {
+      background: var(--text-muted);
+    }
+
+    .timeline-line {
+      flex: 1;
+      width: 1.5px;
+      background: var(--border);
+      margin-top: 4px;
+    }
+
+    .class-card {
+      flex: 1;
+      margin-bottom: 22px;
+      padding-top: 0;
+    }
+
+    #view-home .timeline-item {
+      margin-bottom: 0;
+    }
+
+    #view-home .class-card {
+      margin-bottom: 12px;
+    }
+
+    .class-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .class-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .class-name {
+      font-size: 15.5px;
+      font-weight: 600;
+      margin: 0 0 2px;
+    }
+
+    .class-room {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .now-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--present);
+      background: var(--present-surface);
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+    }
+
+    /* subjects list screen */
+    .row-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .row-left h3 {
+      font-size: 14.5px;
+      margin: 0 0 3px;
+      font-weight: 600;
+    }
+
+    .row-left p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .row-right {
+      text-align: right;
+    }
+
+    .row-pct {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .risk-tag {
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    .risk-tag.safe {
+      color: var(--present);
+    }
+
+    .risk-tag.ontrack {
+      color: var(--accent-blue);
+    }
+
+    .risk-tag.attarget {
+      color: var(--warning);
+    }
+
+    .risk-tag.critical {
+      color: var(--critical);
+    }
+
+    .safe-zone-note {
+      color: var(--text-muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+      margin-top: 4px;
+    }
+
+    /* subject detail */
+    .back-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0 4px;
+    }
+
+    .detail-hero {
+      text-align: left;
+      padding: 14px 4px 6px;
+    }
+
+    .detail-hero .row-pct {
+      font-size: 44px;
+    }
+
+    .chart-wrap {
+      margin-top: 6px;
+    }
+
+    .history-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .history-row:last-child {
+      border-bottom: none;
+    }
+
+    .history-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .history-status {
+      font-size: 13.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* analytics */
+    .risk-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .risk-item:last-child {
+      border-bottom: none;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat-box {
+      background: var(--surface-raised);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+    }
+
+    .stat-box .num {
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .stat-box p {
+      margin: 2px 0 0;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+
+    .whatif-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface-raised);
+      border-radius: 999px;
+      padding: 4px;
+    }
+
+    .stepper button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: var(--border);
+      color: var(--text-primary);
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .select-pill {
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .whatif-result {
+      text-align: center;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: var(--radius-md);
+    }
+
+    .whatif-result .num {
+      font-size: 30px;
+      font-weight: 600;
+    }
+
+    /* history screen */
+    .hist-group+.hist-group {
+      margin-top: 20px;
+    }
+
+    .hist-group-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      margin-bottom: 8px;
+    }
+
+    /* settings */
+    .settings-section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin: 22px 0 8px;
+    }
+
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 15px 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .settings-row span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .settings-row .val {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .settings-row.danger span {
+      color: var(--critical);
+    }
+
+    /* timetable */
+    .day-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .day-tab {
+      min-width: 0;
+      padding: 9px 4px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .day-tab.active {
+      background: var(--present);
+      color: #04140c;
+      border-color: var(--present);
+    }
+
+    .tt-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .tt-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    /* fab */
+    .fab {
+      position: absolute;
+      right: 20px;
+      bottom: 96px;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--present);
+      color: #04140c;
+      border: none;
+      font-size: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -6px rgba(92, 212, 124, 0.5);
+    }
+
+    /* sheet / modal */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(3, 8, 6, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 20;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      padding: 10px 20px 28px;
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+      z-index: 21;
+      pointer-events: none;
+      max-height: 80%;
+      overflow-y: auto;
+    }
+
+    .sheet.show {
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 99px;
+      margin: 6px auto 16px;
+    }
+
+    .sheet h2 {
+      font-size: 18px;
+      margin: 0 0 18px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .target-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--present-surface);
+      color: var(--present);
+      border-color: var(--present);
+    }
+
+    .sheet-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .sheet-actions .btn {
+      flex: 1;
+    }
+
+    /* first-launch setup */
+    .onboarding {
+      position: absolute;
+      inset: 0;
+      z-index: 40;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .onboarding.hidden {
+      display: none;
+    }
+
+    .onboarding-track {
+      display: flex;
+      width: 300%;
+      flex: 1;
+      transform: translateX(0);
+      transition: transform 0.35s cubic-bezier(0.22, 0.8, 0.25, 1);
+    }
+
+    .onboarding-slide {
+      width: 33.333333%;
+      flex: 0 0 33.333333%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 28px 28px 12px;
+    }
+
+    .onboarding-mark {
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background: var(--present-surface);
+      color: var(--present);
+      font:
+        700 28px "Space Grotesk",
+        sans-serif;
+      margin-bottom: 26px;
+    }
+
+    .onboarding-slide h1 {
+      font:
+        700 32px/1.08 "Space Grotesk",
+        sans-serif;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .onboarding-slide p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.55;
+      margin: 0;
+      max-width: 290px;
+    }
+
+    .onboarding-form {
+      margin-top: 28px;
+    }
+
+    .onboarding-form label {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .onboarding-form input {
+      width: 100%;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font:
+        14px "Inter",
+        sans-serif;
+      padding: 13px 14px;
+    }
+
+    .onboarding-form input.invalid {
+      border-color: var(--critical);
+    }
+
+    .onboarding-error {
+      display: none;
+      color: var(--critical);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .onboarding-error.show {
+      display: block;
+    }
+
+    .onboarding-targets {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin-top: 7px;
+    }
+
+    .onboarding-target {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font:
+        600 13px "Inter",
+        sans-serif;
+      padding: 11px 4px;
+    }
+
+    .onboarding-target.active {
+      background: var(--present-surface);
+      border-color: var(--present);
+      color: var(--present);
+    }
+
+    .onboarding-footer {
+      padding: 16px 28px 28px;
+    }
+
+    .onboarding-progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .onboarding-progress span {
+      height: 4px;
+      flex: 1;
+      border-radius: 99px;
+      background: var(--border);
+      transition: background 0.2s ease;
+    }
+
+    .onboarding-progress span.active {
+      background: var(--present);
+    }
+
+    .onboarding-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .onboarding-actions .btn {
+      flex: 1;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      padding: 13px;
+    }
+
+    .setup-reminder {
+      position: absolute;
+      inset: 0;
+      z-index: 35;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(3, 8, 6, 0.68);
+    }
+
+    .setup-reminder.hidden {
+      display: none;
+    }
+
+    .setup-reminder-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .setup-reminder-card h2 {
+      font:
+        700 21px "Space Grotesk",
+        sans-serif;
+      margin: 0 0 8px;
+    }
+
+    .setup-reminder-card p {
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .setup-reminder-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .setup-reminder-actions .btn {
+      flex: 1;
+      justify-content: center;
+      padding: 12px 8px;
+      border-radius: var(--radius-md);
+    }
+
+    .delete-modal {
+      position: absolute;
+      inset: 0;
+      z-index: 45;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(3, 8, 6, 0.72);
+    }
+
+    .delete-modal.hidden {
+      display: none;
+    }
+
+    .delete-modal-card {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--absent);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .delete-modal-card h2 {
+      color: var(--absent);
+      font:
+        700 21px "Space Grotesk",
+        sans-serif;
+      margin: 0 0 8px;
+    }
+
+    .delete-modal-card p {
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      line-height: 1.5;
+      margin: 0 0 16px;
+    }
+
+    .delete-modal-card input {
+      width: 100%;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font:
+        14px "Inter",
+        sans-serif;
+      padding: 13px 14px;
+    }
+
+    .delete-modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .delete-modal-actions .btn {
+      flex: 1;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      padding: 12px 8px;
+    }
+
+    /* toast */
+    .toast {
+      position: absolute;
+      left: 50%;
+      bottom: 96px;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 30;
+      white-space: nowrap;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--present);
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state .glyph {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      font-size: 13.5px;
+      margin: 4px 0 0;
+    }
+
+    .subject-empty {
+      text-align: center;
+      padding: 34px 22px;
+      margin-top: 8px;
+    }
+
+    .subject-empty .glyph {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      border-radius: 16px;
+      background: var(--present-surface);
+      color: var(--present);
+      font:
+        700 24px "Space Grotesk",
+        sans-serif;
+    }
+
+    .subject-empty h2 {
+      font:
+        700 19px "Space Grotesk",
+        sans-serif;
+      margin: 0 0 7px;
+    }
+
+    .subject-empty p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0 auto 18px;
+      max-width: 250px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="device">
+
+    <div class="screen" id="screen">
+      <!-- ============ HOME ============ -->
+      <section class="view active" id="view-home">
+        <div class="topbar">
+          <div>
+            <h1>AttendX</h1>
+            <p id="home-greeting">Simple attendance tracking !!</p>
+          </div>
+          <div class="header-actions">
+            <div class="icon-btn" onclick="go('settings')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+              </svg>
+            </div>
+            <div class="icon-btn" onclick="openSheet('addSubject')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="overall-card">
+          <div class="overall-label">OVERALL ATTENDANCE</div>
+          <div class="overall-pct num" id="home-overall-pct">77.1%</div>
+          <div class="overall-sub" id="home-overall-sub">
+            27 attended · 35 total
+          </div>
+          <div class="pill-row">
+            <span class="pill info" id="home-target-pill">Target 75%</span>
+            <span class="pill ok" id="home-status-pill">On track</span>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h2>Today's classes</h2>
+          <span id="home-date-label">Today · Sep 8</span>
+        </div>
+
+        <div id="home-subject-list"></div>
+      </section>
+
+      <!-- ============ TODAY ============ -->
+      <section class="view" id="view-today">
+        <div class="topbar">
+          <div>
+            <h1>Today</h1>
+            <p id="today-date-label">Tuesday, September 8</p>
+          </div>
+        </div>
+        <div id="today-list"></div>
+      </section>
+
+      <!-- ============ SUBJECTS ============ -->
+      <section class="view" id="view-subjects">
+        <div class="topbar">
+          <div>
+            <h1>Subjects</h1>
+            <p>All subjects at a glance</p>
+          </div>
+          <div class="icon-btn" onclick="openSheet('addSubject')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </div>
+        </div>
+        <div id="subjects-list"></div>
+        <div class="card subject-empty" id="subjects-empty">
+          <div class="glyph">+</div>
+          <h2>Add your first subject</h2>
+          <p>Start tracking attendance by adding a subject to your list.</p>
+          <button class="btn btn-primary btn-full" type="button" onclick="openSheet('addSubject')">
+            Add subject
+          </button>
+        </div>
+      </section>
+
+      <!-- ============ SUBJECT DETAIL ============ -->
+      <section class="view" id="view-detail">
+        <div class="back-row">
+          <div class="icon-btn" onclick="go('subjects')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </div>
+          <div style="flex: 1">
+            <h1 style="
+                  font-size: 17px;
+                  margin: 0;
+                  font-family: &quot;Space Grotesk&quot;, sans-serif;
+                " id="detail-name">
+              Programming With C
+            </h1>
+            <p style="
+                  margin: 2px 0 0;
+                  color: var(--text-secondary);
+                  font-size: 12.5px;
+                " id="detail-faculty">
+              Dr. Sharma
+            </p>
+          </div>
+          <div class="icon-btn" onclick="editCurrentSubject()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="detail-hero">
+          <div class="row-pct num" id="detail-pct">75.0%</div>
+          <div class="overall-sub" id="detail-count">
+            3 attended · 4 total
+          </div>
+          <div class="pill-row">
+            <span class="pill info" id="detail-target-pill">Target 75%</span>
+            <span class="pill ok" id="detail-status-pill">At target</span>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 16px">
+          <div class="status-row">
+            <span style="
+                  font-size: 13px;
+                  color: var(--text-secondary);
+                  font-weight: 600;
+                ">Today</span>
+            <span class="status-tag present" id="detail-today-status">✓ Present today</span>
+          </div>
+          <div class="btn-row" style="margin-top: 12px" id="detail-action-row"></div>
+        </div>
+
+        <div class="section-head">
+          <h2>Attendance trend</h2>
+          <span></span>
+        </div>
+        <div class="card chart-wrap">
+          <svg viewBox="0 0 320 110" width="100%" height="110" id="trend-svg"></svg>
+        </div>
+
+        <div class="section-head">
+          <h2>Can I miss?</h2>
+          <span></span>
+        </div>
+        <div class="card">
+          <p style="
+                margin: 0;
+                font-size: 13.5px;
+                color: var(--text-secondary);
+                line-height: 1.5;
+              " id="canmiss-text">
+            You can miss 0 more classes and stay at 75%.
+          </p>
+        </div>
+
+        <div class="section-head">
+          <h2>History</h2>
+          <span></span>
+        </div>
+        <div class="card" id="detail-history"></div>
+      </section>
+
+      <!-- ============ ANALYTICS ============ -->
+      <section class="view" id="view-analytics">
+        <div class="topbar">
+          <div>
+            <h1>Analytics</h1>
+            <p>Understand your attendance before your next decision.</p>
+          </div>
+        </div>
+
+        <div class="overall-card">
+          <div class="overall-label">OVERALL ATTENDANCE</div>
+          <div class="overall-pct num" id="analytics-overall-pct">0.0%</div>
+          <div class="overall-sub" id="analytics-overall-sub">
+            0 attended · 0 total
+          </div>
+          <div class="pill-row">
+            <span class="pill info" id="analytics-target-pill">Target 75%</span>
+            <span class="pill ok" id="analytics-status-pill">On track</span>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h2>Needs attention</h2>
+          <span>Ranked by risk</span>
+        </div>
+        <div class="card" id="risk-list"></div>
+
+        <div class="section-head">
+          <h2>Attendance trend</h2>
+          <span></span>
+        </div>
+        <div class="card">
+          <svg viewBox="0 0 320 110" width="100%" height="110" id="trend-svg-2"></svg>
+        </div>
+
+        <div class="section-head">
+          <h2>What if I miss classes?</h2>
+          <span></span>
+        </div>
+        <div class="card">
+          <div class="whatif-row">
+            <span style="
+                  font-size: 13px;
+                  color: var(--text-secondary);
+                  font-weight: 600;
+                ">Subject</span>
+            <select class="select-pill" id="whatif-subject" onchange="updateWhatIf()"></select>
+          </div>
+          <div class="whatif-row">
+            <span style="
+                  font-size: 13px;
+                  color: var(--text-secondary);
+                  font-weight: 600;
+                ">Miss next</span>
+            <div class="stepper">
+              <button onclick="stepWhatIf(-1)">–</button>
+              <span class="num" id="whatif-miss-count" style="min-width: 14px; text-align: center">1</span>
+              <button onclick="stepWhatIf(1)">+</button>
+            </div>
+          </div>
+          <div class="whatif-result" id="whatif-result">
+            <div class="num" id="whatif-pct">62.5%</div>
+            <div style="font-size: 12.5px; margin-top: 4px" id="whatif-msg">
+              Below 75% target
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h2>Summary</h2>
+          <span></span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="num" id="analytics-total">0</div>
+            <p>Total classes</p>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="analytics-attended" style="color: var(--present)">
+              0
+            </div>
+            <p>Present</p>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="analytics-absent" style="color: var(--absent)">
+              0
+            </div>
+            <p>Absent</p>
+          </div>
+          <div class="stat-box">
+            <div class="num" id="analytics-pct">0.0%</div>
+            <p>Attendance</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HISTORY ============ -->
+      <section class="view" id="view-history">
+        <div class="topbar">
+          <div>
+            <h1>History</h1>
+            <p>Every record, newest first</p>
+          </div>
+        </div>
+        <div id="history-groups"></div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="view" id="view-settings">
+        <div class="back-row">
+          <div class="icon-btn" onclick="go('home')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </div>
+          <h1 style="font-size: 20px; margin: 0">Settings</h1>
+        </div>
+
+        <div class="settings-section-label">Attendance</div>
+        <div class="settings-row">
+          <span>Default target</span>
+          <span class="val" id="settings-default-target">75%</span>
+        </div>
+
+        <div class="settings-section-label">Timetable</div>
+        <div class="settings-row" onclick="go('timetable')">
+          <span>Manage timetable</span>
+          <span class="val">→</span>
+        </div>
+
+        <div class="settings-section-label">Data</div>
+        <div class="settings-row" onclick="toast('Backup exported')">
+          <span>Export data</span><span class="val">↓</span>
+        </div>
+        <div class="settings-row" onclick="toast('Choose a backup file to import')">
+          <span>Import data</span><span class="val">↑</span>
+        </div>
+
+        <div class="settings-section-label">Danger zone</div>
+        <div class="settings-row danger" onclick="toast('Demo data reset')">
+          <span>Reset demo data</span>
+        </div>
+        <div class="settings-row danger" onclick="openDeleteModal()">
+          <span>Delete all data</span>
+        </div>
+
+        <div class="settings-section-label">About</div>
+        <div class="card" style="text-align: center; padding: 22px">
+          <div style="
+                font-family: &quot;Space Grotesk&quot;, sans-serif;
+                font-weight: 700;
+                font-size: 16px;
+              ">
+            AttendX
+          </div>
+          <div style="color: var(--text-muted); font-size: 12px; margin-top: 2px">
+            Version 1.0
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TIMETABLE ============ -->
+      <section class="view" id="view-timetable">
+        <div class="back-row">
+          <div class="icon-btn" onclick="go('settings')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </div>
+          <h1 style="font-size: 20px; margin: 0">Timetable</h1>
+        </div>
+        <div class="day-tabs" id="day-tabs"></div>
+        <div id="tt-list"></div>
+      </section>
+    </div>
+
+    <!-- FAB shown on timetable -->
+    <button class="fab" id="fab-add-class" style="display: none" onclick="openSheet('addClass')">
+      +
+    </button>
+
+    <section class="onboarding" id="onboarding" aria-label="Initial setup">
+      <div class="onboarding-track" id="onboarding-track">
+        <div class="onboarding-slide">
+          <div class="onboarding-mark">AX</div>
+          <h1>Welcome to AttendX</h1>
+          <p>
+            Keep your attendance clear, current, and easy to act on. Let’s set
+            up the basics before you begin.
+          </p>
+        </div>
+        <div class="onboarding-slide">
+          <div class="onboarding-mark">01</div>
+          <h1>Set your target</h1>
+          <p>
+            Choose the attendance percentage you want to protect. You can
+            change this later in Settings.
+          </p>
+          <div class="onboarding-form">
+            <label for="onboarding-name">Your name</label>
+            <input id="onboarding-name" type="text" placeholder="e.g. Alex" required
+              oninput="clearOnboardingNameError()" />
+            <div class="onboarding-error" id="onboarding-name-error">
+              Please enter your name to continue.
+            </div>
+            <label style="margin-top: 16px">Attendance target</label>
+            <div class="onboarding-targets" id="onboarding-targets">
+              <button class="onboarding-target" type="button" data-target="75">
+                75%
+              </button>
+              <button class="onboarding-target active" type="button" data-target="80">
+                80%
+              </button>
+              <button class="onboarding-target" type="button" data-target="85">
+                85%
+              </button>
+              <button class="onboarding-target" type="button" data-target="90">
+                90%
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="onboarding-slide">
+          <div class="onboarding-mark">✓</div>
+          <h1>You’re ready</h1>
+          <p>
+            Add your subjects and timetable from the home screen. AttendX will
+            keep today’s classes and your progress in view.
+          </p>
+        </div>
+      </div>
+      <div class="onboarding-footer">
+        <div class="onboarding-progress" id="onboarding-progress">
+          <span class="active"></span><span></span><span></span>
+        </div>
+        <div class="onboarding-actions">
+          <button class="btn btn-secondary" id="onboarding-back" type="button" onclick="previousOnboardingSlide()"
+            style="display: none">
+            Back
+          </button>
+          <button class="btn btn-primary" id="onboarding-next" type="button" onclick="nextOnboardingSlide()">
+            Continue
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="setup-reminder hidden" id="setup-reminder" aria-label="Complete setup">
+      <div class="setup-reminder-card">
+        <h2 id="setup-reminder-title">Finish setting up AttendX</h2>
+        <p id="setup-reminder-message">
+          Add a subject and timetable so your home screen can show your
+          classes.
+        </p>
+        <div class="setup-reminder-actions">
+          <button class="btn btn-secondary" type="button" onclick="dismissSetupReminder()">
+            Later
+          </button>
+          <button class="btn btn-primary" id="setup-reminder-action" type="button" onclick="openSetupStep()">
+            Add subject
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="delete-modal hidden" id="delete-modal" aria-label="Delete all data confirmation">
+      <div class="delete-modal-card">
+        <h2>Delete everything?</h2>
+        <p>
+          This permanently removes all subjects, attendance records, timetable
+          classes, and saved setup. Type <strong>delete everything</strong> to
+          confirm.
+        </p>
+        <input id="delete-confirmation" type="text" autocomplete="off" placeholder="delete everything"
+          oninput="updateDeleteButton()" />
+        <div class="delete-modal-actions">
+          <button class="btn btn-secondary" type="button" onclick="closeDeleteModal()">
+            Cancel
+          </button>
+          <button class="btn btn-danger" id="delete-confirm-button" type="button" onclick="deleteEverything()" disabled>
+            Delete everything
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- bottom nav -->
+    <nav class="bottomnav">
+      <button class="navitem active" data-view="home" onclick="go('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3 11l9-8 9 8" />
+          <path d="M5 10v10h14V10" />
+        </svg>
+        Home
+      </button>
+      <button class="navitem" data-view="subjects" onclick="go('subjects')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M4 19.5A2.5 2.5 0 016.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
+        </svg>
+        Subjects
+      </button>
+      <button class="navitem" data-view="analytics" onclick="go('analytics')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3 3v18h18" />
+          <path d="M7 15l4-5 3 3 5-7" />
+        </svg>
+        Analytics
+      </button>
+      <button class="navitem" data-view="timetable" onclick="go('timetable')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M3 10h18M8 3v4M16 3v4" />
+        </svg>
+        Time Table
+      </button>
+      <button class="navitem" data-view="history" onclick="go('history')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 3" />
+        </svg>
+        History
+      </button>
+    </nav>
+
+    <!-- overlay + sheets -->
+    <div class="overlay" id="overlay" onclick="closeSheets()"></div>
+
+    <div class="sheet" id="sheet-addSubject">
+      <div class="sheet-handle"></div>
+      <h2 id="subject-sheet-title">Add subject</h2>
+      <div class="field">
+        <label>Subject name</label><input type="text" id="f-name" placeholder="e.g. Data Structures" />
+      </div>
+      <div class="field">
+        <label>Faculty (optional)</label><input type="text" id="f-faculty" placeholder="e.g. Dr. Rao" />
+      </div>
+      <div class="field">
+        <label>Attendance target</label>
+        <div class="target-chips" id="target-chips">
+          <div class="chip" data-t="75">75%</div>
+          <div class="chip" data-t="80">80%</div>
+          <div class="chip" data-t="85">85%</div>
+          <div class="chip" data-t="90">90%</div>
+        </div>
+      </div>
+      <div class="sheet-actions">
+        <button class="btn btn-secondary btn-full" onclick="closeSheets()">
+          Cancel
+        </button>
+        <button class="btn btn-primary btn-full" id="subject-sheet-save" onclick="saveSubject()">
+          Add subject
+        </button>
+      </div>
+      <div id="delete-subject-row" style="display: none; margin-top: 10px">
+        <button class="btn btn-danger btn-full" onclick="deleteCurrentSubject()">
+          Delete subject
+        </button>
+      </div>
+    </div>
+
+    <div class="sheet" id="sheet-addClass">
+      <div class="sheet-handle"></div>
+      <h2>Add class</h2>
+      <div class="field">
+        <label>Subject</label>
+        <select id="c-subject"></select>
+      </div>
+      <div class="field">
+        <label>Day</label>
+        <select id="c-day">
+          <option value="1">Monday</option>
+          <option value="2">Tuesday</option>
+          <option value="3">Wednesday</option>
+          <option value="4">Thursday</option>
+          <option value="5">Friday</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Start time</label><input type="time" id="c-start" value="09:00" />
+      </div>
+      <div class="field">
+        <label>End time</label><input type="time" id="c-end" value="09:50" />
+      </div>
+      <div class="field">
+        <label>Room (optional)</label><input type="text" id="c-room" placeholder="e.g. 204" />
+      </div>
+      <div class="sheet-actions">
+        <button class="btn btn-secondary btn-full" onclick="closeSheets()">
+          Cancel
+        </button>
+        <button class="btn btn-primary btn-full" onclick="saveClass()">
+          Add class
+        </button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">
+      <span class="toast-dot"></span><span id="toast-text">Saved</span>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================================
+DATA MODEL — mirrors data-model.md
+============================================================ */
+    const todayKey = localDateKey();
+    const dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const todayWeekday = new Date().getDay();
+
+    let state = {
+      settings: { defaultTarget: 75 },
+      subjects: [],
+      timetable: [],
+    };
+
+    let currentDetailId = null;
+    let editingSubject = null;
+    let selectedTTDay = todayWeekday;
+    let whatifMiss = 1;
+    let selectedTarget = 75;
+    let onboardingSlide = 0;
+    let onboardingTarget = 80;
+    const stateStorageKey = "attendx-state";
+    const onboardingStorageKey = "attendx-onboarding-complete";
+    const dailyGreetingStorageKey = "attendx-last-greeting-date";
+
+    function loadSavedState() {
+      try {
+        const savedState = JSON.parse(
+          localStorage.getItem(stateStorageKey) || "null",
+        );
+        if (!savedState) return;
+        state = {
+          ...state,
+          ...savedState,
+          settings: { ...state.settings, ...(savedState.settings || {}) },
+          subjects: Array.isArray(savedState.subjects)
+            ? savedState.subjects
+            : [],
+          timetable: Array.isArray(savedState.timetable)
+            ? savedState.timetable
+            : [],
+        };
+      } catch (error) {
+        localStorage.removeItem(stateStorageKey);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(stateStorageKey, JSON.stringify(state));
+    }
+
+    /* ============================================================
+DOMAIN LOGIC — pure functions per architecture.md
+============================================================ */
+    function subjectCounts(sub) {
+      const vals = Object.values(sub.records);
+      const attended = vals.filter((v) => v === "present").length;
+      const total = vals.length;
+      return { attended, total };
+    }
+    function pct(attended, total) {
+      return total > 0 ? (attended / total) * 100 : 0;
+    }
+
+    function canMiss(attended, total, target) {
+      // max m>=0 where attended/(total+m) >= target/100
+      if (total === 0) return 0;
+      let m = 0;
+      while (attended / (total + m + 1) >= target / 100) {
+        m++;
+        if (m > 200) break;
+      }
+      return m;
+    }
+    function classesNeeded(attended, total, target) {
+      if (total === 0) return 0;
+      let n = 0;
+      if (attended / total >= target / 100) return 0;
+      while ((attended + n) / (total + n) < target / 100) {
+        n++;
+        if (n > 500) break;
+      }
+      return n;
+    }
+    function riskLabel(p, target) {
+      if (p < target) return { label: "Critical", cls: "critical" };
+      if (Math.abs(p - target) < 0.05)
+        return { label: "At target", cls: "attarget" };
+      if (p >= target + 10) return { label: "Safe", cls: "safe" };
+      return { label: "On track", cls: "ontrack" };
+    }
+    function statusPillClass(cls) {
+      if (cls === "critical") return "crit";
+      if (cls === "attarget") return "warn";
+      if (cls === "ontrack") return "info";
+      return "ok";
+    }
+    function todayStatus(sub) {
+      return sub.records[todayKey] || null;
+    }
+
+    function overallStats() {
+      let attended = 0,
+        total = 0;
+      state.subjects.forEach((s) => {
+        const c = subjectCounts(s);
+        attended += c.attended;
+        total += c.total;
+      });
+      return { attended, total, pct: pct(attended, total) };
+    }
+
+    /* ============================================================
+ATTENDANCE ACTION — transition matrix per attendance.md
+============================================================ */
+    function markAttendance(subjectId, action) {
+      const sub = state.subjects.find((s) => s.id === subjectId);
+      const current = sub.records[todayKey];
+      if (current === action) {
+        delete sub.records[todayKey];
+        toast("Marking removed");
+      } else {
+        sub.records[todayKey] = action;
+        toast(action === "present" ? "Marked present" : "Marked absent");
+      }
+      renderAll();
+    }
+
+    /* ============================================================
+RENDERING
+============================================================ */
+    function fmtPct(p) {
+      return p.toFixed(1) + "%";
+    }
+
+    function statusTagHTML(status) {
+      if (status === "present")
+        return '<span class="status-tag present">✓ Present today</span>';
+      if (status === "absent")
+        return '<span class="status-tag absent">✕ Absent today</span>';
+      return '<span class="status-tag none">○ Not marked today</span>';
+    }
+
+    function actionButtonsHTML(subjectId, status) {
+      if (status === "present") {
+        return `<button class="btn btn-undo" onclick="markAttendance('${subjectId}','present')">Undo present</button>`;
+      }
+      if (status === "absent") {
+        return `<button class="btn btn-undo" onclick="markAttendance('${subjectId}','absent')">Undo absent</button>`;
+      }
+      return `<button class="btn btn-absent" onclick="markAttendance('${subjectId}','absent')">Absent</button>
+          <button class="btn btn-present" onclick="markAttendance('${subjectId}','present')">Present</button>`;
+    }
+
+    function insightHTML(attended, total, target, status) {
+      const p = pct(attended, total);
+      if (p >= target) {
+        const m = canMiss(attended, total, target);
+        return m > 0 ? `Can miss ${m} more` : `At the edge — 0 to miss`;
+      } else {
+        const n = classesNeeded(attended, total, target);
+        return `Need ${n} more to reach ${target}%`;
+      }
+    }
+
+    function timetableForToday() {
+      return state.timetable
+        .filter((t) => t.day === todayWeekday)
+        .sort((a, b) => a.startTime.localeCompare(b.startTime));
+    }
+
+    function timeToMinutes(value) {
+      const [hours, minutes] = value.split(":").map(Number);
+      return hours * 60 + minutes;
+    }
+
+    function currentMinutes() {
+      const now = new Date();
+      return now.getHours() * 60 + now.getMinutes();
+    }
+
+    function classPhase(item) {
+      const now = currentMinutes();
+      const start = timeToMinutes(item.startTime);
+      const end = item.endTime ? timeToMinutes(item.endTime) : start + 50;
+      if (now >= end) return "done";
+      if (now >= start) return "now";
+      return "upcoming";
+    }
+
+    function classCardHTML(item, showRail = false, index = 0, total = 1) {
+      const sub = state.subjects.find((s) => s.id === item.subjectId);
+      if (!sub) return "";
+      const status = todayStatus(sub);
+      const phase = classPhase(item);
+      const rail = showRail
+        ? `
+        <div class="timeline-rail">
+          <div class="timeline-dot ${phase === "now" ? "now" : phase === "done" ? "done" : ""}"></div>
+          ${index < total - 1 ? '<div class="timeline-line"></div>' : ""}
+        </div>`
+        : "";
+      return `
+    <div class="timeline-item">
+      ${rail}
+      <div class="card class-card">
+        <div class="class-time">${item.startTime}${item.endTime ? " – " + item.endTime : ""}</div>
+        <div class="class-head">
+          <div>
+            <p class="class-name">${sub.name}</p>
+            <p class="class-room">${item.room ? "Room " + item.room : ""}</p>
+          </div>
+          ${phase === "now" && !status ? '<span class="now-badge">NOW</span>' : ""}
+        </div>
+        <div class="status-row" style="margin-top:10px;">${statusTagHTML(status)}</div>
+        <div class="btn-row" style="margin-top:10px;">${actionButtonsHTML(sub.id, status)}</div>
+      </div>
+    </div>`;
+    }
+
+    function renderHome() {
+      const date = new Date();
+      document.getElementById("home-date-label").textContent =
+        `Today · ${date.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })}`;
+      const o = overallStats();
+      document.getElementById("home-overall-pct").textContent = fmtPct(o.pct);
+      document.getElementById("home-overall-sub").textContent =
+        `${o.attended} attended · ${o.total} total`;
+      document.getElementById("home-target-pill").textContent =
+        `Target ${state.settings.defaultTarget}%`;
+      const pill = document.getElementById("home-status-pill");
+      const r = riskLabel(o.pct, state.settings.defaultTarget);
+      pill.textContent = r.label === "Critical" ? "Below target" : r.label;
+      pill.className = "pill " + statusPillClass(r.cls);
+
+      const list = document.getElementById("home-subject-list");
+      const items = timetableForToday();
+      list.innerHTML = items.length
+        ? items
+          .map((item, index) =>
+            classCardHTML(item, false, index, items.length),
+          )
+          .join("")
+        : `<div class="empty-state"><div class="glyph">☀️</div><p>No classes today</p></div>`;
+    }
+
+    function renderToday() {
+      const date = new Date();
+      document.getElementById("today-date-label").textContent =
+        date.toLocaleDateString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+        });
+      const items = timetableForToday();
+      const list = document.getElementById("today-list");
+      if (items.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="glyph">☀️</div><p>No classes today</p></div>`;
+        return;
+      }
+      list.innerHTML = items
+        .map((item, index) => classCardHTML(item, true, index, items.length))
+        .join("");
+    }
+
+    function renderSubjects() {
+      const list = document.getElementById("subjects-list");
+      document.getElementById("subjects-empty").style.display = state.subjects
+        .length
+        ? "none"
+        : "block";
+      list.innerHTML = state.subjects
+        .map((s) => {
+          const c = subjectCounts(s);
+          const p = pct(c.attended, c.total);
+          const r = riskLabel(p, s.target);
+          const safeZone =
+            c.total === 0
+              ? "No classes yet"
+              : p >= s.target
+                ? `Can miss ${canMiss(c.attended, c.total, s.target)} more`
+                : `Attend ${classesNeeded(c.attended, c.total, s.target)} more`;
+          return `
+    <div class="row-card" onclick="openDetail('${s.id}')">
+      <div class="row-left">
+        <h3>${s.name}</h3>
+        <p>${s.faculty || ""} · ${c.attended}/${c.total}</p>
+        <div class="safe-zone-note">Safe zone: ${safeZone}</div>
+      </div>
+      <div class="row-right">
+        <div class="row-pct num">${Math.round(p)}%</div>
+        <div class="risk-tag ${r.cls}">${r.label}</div>
+      </div>
+    </div>`;
+        })
+        .join("");
+    }
+
+    function buildTrendPoints(sub) {
+      const dates = Object.keys(sub.records).sort();
+      let attended = 0,
+        total = 0;
+      const pts = [];
+      dates.forEach((d) => {
+        total++;
+        if (sub.records[d] === "present") attended++;
+        pts.push(pct(attended, total));
+      });
+      return pts.length ? pts : [0];
+    }
+    function svgFromPoints(pts, target) {
+      const w = 320,
+        h = 110,
+        pad = 8;
+      const max = 100,
+        min = 0;
+      const stepX = pts.length > 1 ? (w - 2 * pad) / (pts.length - 1) : 0;
+      const y = (v) => h - pad - ((v - min) / (max - min)) * (h - 2 * pad);
+      const targetY = y(target);
+      let path = pts
+        .map((v, i) => `${i === 0 ? "M" : "L"} ${pad + i * stepX} ${y(v)}`)
+        .join(" ");
+      const last = pts[pts.length - 1];
+      return `
+    <line x1="${pad}" y1="${targetY}" x2="${w - pad}" y2="${targetY}" stroke="#2a3833" stroke-width="1" stroke-dasharray="3 4"/>
+    <path d="${path}" fill="none" stroke="#5CD47C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${pad + (pts.length - 1) * stepX}" cy="${y(last)}" r="4" fill="#5CD47C"/>
+  `;
+    }
+
+    function openDetail(id) {
+      currentDetailId = id;
+      const sub = state.subjects.find((s) => s.id === id);
+      const c = subjectCounts(sub);
+      const p = pct(c.attended, c.total);
+      const status = todayStatus(sub);
+      const r = riskLabel(p, sub.target);
+
+      document.getElementById("detail-name").textContent = sub.name;
+      document.getElementById("detail-faculty").textContent =
+        sub.faculty || "";
+      document.getElementById("detail-pct").textContent = fmtPct(p);
+      document.getElementById("detail-count").textContent =
+        `${c.attended} attended · ${c.total} total`;
+      document.getElementById("detail-target-pill").textContent =
+        `Target ${sub.target}%`;
+      const sp = document.getElementById("detail-status-pill");
+      sp.textContent = r.label;
+      sp.className = "pill " + statusPillClass(r.cls);
+      document.getElementById("detail-today-status").outerHTML =
+        statusTagHTML(status).replace(
+          "status-tag",
+          'status-tag" id="detail-today-status',
+        );
+      document.getElementById("detail-action-row").innerHTML =
+        actionButtonsHTML(sub.id, status);
+
+      const m = canMiss(c.attended, c.total, sub.target);
+      const n = classesNeeded(c.attended, c.total, sub.target);
+      document.getElementById("canmiss-text").textContent =
+        p >= sub.target
+          ? `You can miss ${m} more class${m === 1 ? "" : "es"} and remain at or above ${sub.target}%.`
+          : `You need to attend ${n} more class${n === 1 ? "" : "es"} in a row to reach ${sub.target}%.`;
+
+      document.getElementById("trend-svg").innerHTML = svgFromPoints(
+        buildTrendPoints(sub),
+        sub.target,
+      );
+
+      const dates = Object.keys(sub.records).sort().reverse();
+      document.getElementById("detail-history").innerHTML =
+        dates
+          .map((d) => {
+            const st = sub.records[d];
+            const dt = new Date(d + "T00:00:00");
+            const label = dt.toLocaleDateString("en-US", {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+            });
+            return `<div class="history-row">
+      <span class="history-date">${label}</span>
+      <span class="history-status" style="color:${st === "present" ? "var(--present)" : "var(--absent)"}">${st === "present" ? "✓ Present" : "✕ Absent"}</span>
+    </div>`;
+          })
+          .join("") || '<div class="empty-state"><p>No records yet</p></div>';
+
+      go("detail");
+    }
+
+    function renderAnalytics() {
+      const overall = overallStats();
+      const analyticsRisk = riskLabel(
+        overall.pct,
+        state.settings.defaultTarget,
+      );
+      document.getElementById("analytics-overall-pct").textContent = fmtPct(
+        overall.pct,
+      );
+      document.getElementById("analytics-overall-sub").textContent =
+        `${overall.attended} attended · ${overall.total} total`;
+      document.getElementById("analytics-target-pill").textContent =
+        `Target ${state.settings.defaultTarget}%`;
+      const analyticsPill = document.getElementById("analytics-status-pill");
+      analyticsPill.textContent =
+        analyticsRisk.label === "Critical"
+          ? "Below target"
+          : analyticsRisk.label;
+      analyticsPill.className = "pill " + statusPillClass(analyticsRisk.cls);
+      document.getElementById("analytics-total").textContent = overall.total;
+      document.getElementById("analytics-attended").textContent =
+        overall.attended;
+      document.getElementById("analytics-absent").textContent =
+        overall.total - overall.attended;
+      document.getElementById("analytics-pct").textContent = fmtPct(
+        overall.pct,
+      );
+
+      const list = document.getElementById("risk-list");
+      const ranked = [...state.subjects]
+        .map((s) => {
+          const c = subjectCounts(s);
+          const p = pct(c.attended, c.total);
+          return { s, c, p, r: riskLabel(p, s.target) };
+        })
+        .sort((a, b) => a.p - b.p);
+
+      list.innerHTML = ranked
+        .map(({ s, c, p, r }) => {
+          const m = canMiss(c.attended, c.total, s.target);
+          const n = classesNeeded(c.attended, c.total, s.target);
+          const note = p >= s.target ? `Can miss ${m}` : `Need ${n} classes`;
+          return `<div class="risk-item">
+      <div>
+        <div style="font-size:14px;font-weight:600;">${s.name}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${note}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="num" style="font-size:16px;font-weight:600;">${Math.round(p)}%</div>
+        <div class="risk-tag ${r.cls}">${r.label}</div>
+      </div>
+    </div>`;
+        })
+        .join("");
+
+      // combined trend across all subjects
+      let attended = 0,
+        total = 0;
+      const pts = [];
+      const allDates = [
+        ...new Set(state.subjects.flatMap((s) => Object.keys(s.records))),
+      ].sort();
+      allDates.forEach((d) => {
+        state.subjects.forEach((s) => {
+          if (s.records[d]) {
+            total++;
+            if (s.records[d] === "present") attended++;
+          }
+        });
+        pts.push(pct(attended, total));
+      });
+      document.getElementById("trend-svg-2").innerHTML = svgFromPoints(
+        pts.length ? pts : [0],
+        state.settings.defaultTarget,
+      );
+
+      // what-if subject select
+      const sel = document.getElementById("whatif-subject");
+      if (!sel.dataset.built) {
+        sel.innerHTML = state.subjects
+          .map((s) => `<option value="${s.id}">${s.name}</option>`)
+          .join("");
+        sel.dataset.built = "1";
+      }
+      updateWhatIf();
+    }
+
+    function stepWhatIf(d) {
+      whatifMiss = Math.max(1, whatifMiss + d);
+      document.getElementById("whatif-miss-count").textContent = whatifMiss;
+      updateWhatIf();
+    }
+    function updateWhatIf() {
+      const id = document.getElementById("whatif-subject").value;
+      const sub = state.subjects.find((s) => s.id === id);
+      if (!sub) {
+        const box = document.getElementById("whatif-result");
+        box.style.background = "var(--surface-raised)";
+        document.getElementById("whatif-pct").style.color =
+          "var(--text-secondary)";
+        document.getElementById("whatif-pct").textContent = "0.0%";
+        document.getElementById("whatif-msg").textContent =
+          "Add a subject first";
+        document.getElementById("whatif-msg").style.color =
+          "var(--text-secondary)";
+        return;
+      }
+      const c = subjectCounts(sub);
+      const resultPct = pct(c.attended, c.total + whatifMiss);
+      const box = document.getElementById("whatif-result");
+      const below = resultPct < sub.target;
+      box.style.background = below
+        ? "var(--absent-surface)"
+        : "var(--present-surface)";
+      document.getElementById("whatif-pct").style.color = below
+        ? "var(--critical)"
+        : "var(--present)";
+      document.getElementById("whatif-pct").textContent = fmtPct(resultPct);
+      document.getElementById("whatif-msg").textContent = below
+        ? `Below ${sub.target}% target`
+        : `Still above ${sub.target}% target`;
+      document.getElementById("whatif-msg").style.color = below
+        ? "var(--critical)"
+        : "var(--present)";
+    }
+
+    function renderHistory() {
+      const byDate = {};
+      state.subjects.forEach((s) => {
+        Object.entries(s.records).forEach(([d, st]) => {
+          byDate[d] = byDate[d] || [];
+          byDate[d].push({ sub: s, status: st });
+        });
+      });
+      const dates = Object.keys(byDate).sort().reverse();
+      const el = document.getElementById("history-groups");
+      if (dates.length === 0) {
+        el.innerHTML = `<div class="empty-state"><div class="glyph">🗂️</div><p>No history yet</p></div>`;
+        return;
+      }
+      el.innerHTML = dates
+        .map((d) => {
+          const dt = new Date(d + "T00:00:00");
+          const label =
+            d === todayKey
+              ? "Today"
+              : dt.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+              });
+          const rows = byDate[d]
+            .map(
+              ({ sub, status }) => `
+      <div class="history-row">
+        <span style="font-size:13.5px;">${sub.name}</span>
+        <span class="history-status" style="color:${status === "present" ? "var(--present)" : "var(--absent)"}">${status === "present" ? "✓ Present" : "✕ Absent"}</span>
+      </div>`,
+            )
+            .join("");
+          return `<div class="hist-group">
+      <div class="hist-group-label">${label.toUpperCase()}</div>
+      <div class="card">${rows}</div>
+    </div>`;
+        })
+        .join("");
+    }
+
+    function renderSettings() {
+      document.getElementById("settings-default-target").textContent =
+        state.settings.defaultTarget + "%";
+    }
+
+    function renderTimetable() {
+      const tabs = document.getElementById("day-tabs");
+      const days = [1, 2, 3, 4, 5];
+      tabs.innerHTML = days
+        .map(
+          (d) =>
+            `<div class="day-tab ${d === selectedTTDay ? "active" : ""}" onclick="selectTTDay(${d})">${dayLabels[d].toUpperCase()}</div>`,
+        )
+        .join("");
+      const list = document.getElementById("tt-list");
+      const items = state.timetable
+        .filter((t) => t.day === selectedTTDay)
+        .sort((a, b) => a.startTime.localeCompare(b.startTime));
+      if (items.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="glyph">🗓️</div><p>No classes on ${dayLabels[selectedTTDay]}</p></div>`;
+        return;
+      }
+      list.innerHTML = items
+        .map((t) => {
+          const sub = state.subjects.find((s) => s.id === t.subjectId);
+          return `<div class="card tt-card">
+      <div>
+        <div class="tt-time">${t.startTime}${t.endTime ? " – " + t.endTime : ""}</div>
+        <div style="font-weight:600;font-size:14.5px;">${sub.name}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">${t.room ? "Room " + t.room : ""}</div>
+      </div>
+      <button class="icon-btn" onclick="deleteClass('${t.id}')" style="width:32px;height:32px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>
+      </button>
+    </div>`;
+        })
+        .join("");
+    }
+    function selectTTDay(d) {
+      selectedTTDay = d;
+      renderTimetable();
+    }
+    function deleteClass(id) {
+      state.timetable = state.timetable.filter((t) => t.id !== id);
+      saveState();
+      renderTimetable();
+      toast("Class removed");
+    }
+
+    function renderAll() {
+      saveState();
+      renderHome();
+      renderToday();
+      renderSubjects();
+      renderAnalytics();
+      renderHistory();
+      renderSettings();
+      renderTimetable();
+      updateSetupReminder();
+      if (currentDetailId) openDetail(currentDetailId);
+    }
+
+    /* ============================================================
+NAVIGATION
+============================================================ */
+    function go(view) {
+      document
+        .querySelectorAll(".view")
+        .forEach((v) => v.classList.remove("active"));
+      document.getElementById("view-" + view).classList.add("active");
+      document
+        .querySelectorAll(".navitem")
+        .forEach((n) =>
+          n.classList.toggle("active", n.dataset.view === view),
+        );
+      document.getElementById("fab-add-class").style.display =
+        view === "timetable" ? "flex" : "none";
+      document.getElementById("screen").scrollTop = 0;
+    }
+
+    function updateOnboarding() {
+      document.getElementById("onboarding-track").style.transform =
+        `translateX(-${onboardingSlide * 33.333333}%)`;
+      document
+        .querySelectorAll("#onboarding-progress span")
+        .forEach((step, index) => {
+          step.classList.toggle("active", index <= onboardingSlide);
+        });
+      document.getElementById("onboarding-back").style.display =
+        onboardingSlide === 0 ? "none" : "inline-flex";
+      document.getElementById("onboarding-next").textContent =
+        onboardingSlide === 2 ? "Start using AttendX" : "Continue";
+    }
+
+    function nextOnboardingSlide() {
+      if (onboardingSlide < 2) {
+        onboardingSlide++;
+        updateOnboarding();
+        return;
+      }
+      const name = document.getElementById("onboarding-name").value.trim();
+      if (!name) {
+        document.getElementById("onboarding-name").classList.add("invalid");
+        document
+          .getElementById("onboarding-name-error")
+          .classList.add("show");
+        document.getElementById("onboarding-name").focus();
+        onboardingSlide = 1;
+        updateOnboarding();
+        return;
+      }
+      state.settings.defaultTarget = onboardingTarget;
+      state.settings.userName = name;
+      localStorage.setItem(
+        "attendx-onboarding-settings",
+        JSON.stringify({
+          defaultTarget: onboardingTarget,
+          userName: name,
+        }),
+      );
+      localStorage.setItem(onboardingStorageKey, "1");
+      document.getElementById("onboarding").classList.add("hidden");
+      renderAll();
+      showDailyGreeting();
+    }
+
+    function clearOnboardingNameError() {
+      const input = document.getElementById("onboarding-name");
+      input.classList.remove("invalid");
+      document
+        .getElementById("onboarding-name-error")
+        .classList.remove("show");
+    }
+
+    function localDateKey() {
+      const now = new Date();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${now.getFullYear()}-${month}-${day}`;
+    }
+
+    function showDailyGreeting() {
+      const name = state.settings.userName;
+      if (!name) return;
+      const currentDate = localDateKey();
+      if (localStorage.getItem(dailyGreetingStorageKey) === currentDate)
+        return;
+      localStorage.setItem(dailyGreetingStorageKey, currentDate);
+      toast(`Welcome back, ${name}`);
+    }
+
+    function previousOnboardingSlide() {
+      if (onboardingSlide === 0) return;
+      onboardingSlide--;
+      updateOnboarding();
+    }
+
+    function setupIsComplete() {
+      return state.subjects.length > 0 && state.timetable.length > 0;
+    }
+
+    function updateSetupReminder() {
+      const reminder = document.getElementById("setup-reminder");
+      if (
+        localStorage.getItem(onboardingStorageKey) !== "1" ||
+        setupIsComplete()
+      ) {
+        reminder.classList.add("hidden");
+        return;
+      }
+      const hasSubjects = state.subjects.length > 0;
+      const title = document.getElementById("setup-reminder-title");
+      const message = document.getElementById("setup-reminder-message");
+      const action = document.getElementById("setup-reminder-action");
+      title.textContent = hasSubjects
+        ? "Add your timetable"
+        : "Add your first subject";
+      message.textContent = hasSubjects
+        ? "Add at least one timetable class so today’s schedule can appear on Home."
+        : "Add a subject and timetable so your Home screen can show your classes.";
+      action.textContent = hasSubjects ? "Open timetable" : "Add subject";
+      reminder.classList.remove("hidden");
+    }
+
+    function dismissSetupReminder() {
+      document.getElementById("setup-reminder").classList.add("hidden");
+    }
+
+    function openSetupStep() {
+      dismissSetupReminder();
+      if (state.subjects.length === 0) {
+        openSheet("addSubject");
+      } else {
+        go("timetable");
+      }
+    }
+
+    function openDeleteModal() {
+      closeSheets();
+      document.getElementById("delete-confirmation").value = "";
+      updateDeleteButton();
+      document.getElementById("delete-modal").classList.remove("hidden");
+      document.getElementById("delete-confirmation").focus();
+    }
+
+    function closeDeleteModal() {
+      document.getElementById("delete-modal").classList.add("hidden");
+    }
+
+    function updateDeleteButton() {
+      const value = document
+        .getElementById("delete-confirmation")
+        .value.trim()
+        .toLowerCase();
+      document.getElementById("delete-confirm-button").disabled =
+        value !== "delete everything";
+    }
+
+    function deleteEverything() {
+      const value = document
+        .getElementById("delete-confirmation")
+        .value.trim()
+        .toLowerCase();
+      if (value !== "delete everything") return;
+      state.subjects = [];
+      state.timetable = [];
+      state.settings = { defaultTarget: 75 };
+      currentDetailId = null;
+      selectedTTDay = todayWeekday;
+      localStorage.removeItem(onboardingStorageKey);
+      localStorage.removeItem("attendx-onboarding-settings");
+      localStorage.removeItem(dailyGreetingStorageKey);
+      closeDeleteModal();
+      document.getElementById("onboarding").classList.remove("hidden");
+      onboardingSlide = 0;
+      onboardingTarget = 80;
+      updateOnboarding();
+      renderAll();
+      toast("Everything deleted");
+    }
+
+    document
+      .querySelectorAll("#onboarding-targets .onboarding-target")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          onboardingTarget = Number(button.dataset.target);
+          document
+            .querySelectorAll("#onboarding-targets .onboarding-target")
+            .forEach((option) => {
+              option.classList.toggle("active", option === button);
+            });
+        });
+      });
+
+    /* ============================================================
+SHEETS / MODALS
+============================================================ */
+    function openSheet(name) {
+      document.getElementById("overlay").classList.add("show");
+      if (name === "addSubject") {
+        document.getElementById("subject-sheet-title").textContent =
+          editingSubject ? "Edit subject" : "Add subject";
+        document.getElementById("subject-sheet-save").textContent =
+          editingSubject ? "Save changes" : "Add subject";
+        document.getElementById("delete-subject-row").style.display =
+          editingSubject ? "block" : "none";
+        document.getElementById("f-name").value = editingSubject
+          ? editingSubject.name
+          : "";
+        document.getElementById("f-faculty").value = editingSubject
+          ? editingSubject.faculty || ""
+          : "";
+        selectedTarget = editingSubject
+          ? editingSubject.target
+          : state.settings.defaultTarget;
+        document
+          .querySelectorAll("#target-chips .chip")
+          .forEach((c) =>
+            c.classList.toggle(
+              "active",
+              Number(c.dataset.t) === selectedTarget,
+            ),
+          );
+      }
+      if (name === "addClass") {
+        const sel = document.getElementById("c-subject");
+        sel.innerHTML = state.subjects
+          .map((s) => `<option value="${s.id}">${s.name}</option>`)
+          .join("");
+        document.getElementById("c-day").value = selectedTTDay;
+      }
+      document.getElementById("sheet-" + name).classList.add("show");
+    }
+    function closeSheets() {
+      document.getElementById("overlay").classList.remove("show");
+      document
+        .querySelectorAll(".sheet")
+        .forEach((s) => s.classList.remove("show"));
+      editingSubject = null;
+    }
+    document.querySelectorAll("#target-chips .chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        selectedTarget = Number(chip.dataset.t);
+        document
+          .querySelectorAll("#target-chips .chip")
+          .forEach((c) => c.classList.toggle("active", c === chip));
+      });
+    });
+
+    function saveSubject() {
+      const name = document.getElementById("f-name").value.trim();
+      if (!name) {
+        toast("Subject name required");
+        return;
+      }
+      const faculty = document.getElementById("f-faculty").value.trim();
+      if (editingSubject) {
+        editingSubject.name = name;
+        editingSubject.faculty = faculty;
+        editingSubject.target = selectedTarget;
+        toast("Subject updated");
+      } else {
+        state.subjects.push({
+          id: "s" + Date.now(),
+          name,
+          faculty,
+          target: selectedTarget,
+          records: {},
+        });
+        toast("Subject added");
+      }
+      closeSheets();
+      renderAll();
+    }
+    function editCurrentSubject() {
+      editingSubject = state.subjects.find((s) => s.id === currentDetailId);
+      openSheet("addSubject");
+    }
+    function deleteCurrentSubject() {
+      state.subjects = state.subjects.filter(
+        (s) => s.id !== editingSubject.id,
+      );
+      state.timetable = state.timetable.filter(
+        (t) => t.subjectId !== editingSubject.id,
+      );
+      closeSheets();
+      toast("Subject deleted");
+      go("subjects");
+      renderAll();
+    }
+    function saveClass() {
+      const subjectId = document.getElementById("c-subject").value;
+      const day = Number(document.getElementById("c-day").value);
+      const startTime = document.getElementById("c-start").value;
+      const endTime = document.getElementById("c-end").value;
+      const room = document.getElementById("c-room").value.trim();
+      if (!startTime) {
+        toast("Start time required");
+        return;
+      }
+      if (endTime && endTime <= startTime) {
+        toast("End time must be after start");
+        return;
+      }
+      const dup = state.timetable.some(
+        (t) =>
+          t.subjectId === subjectId &&
+          t.day === day &&
+          t.startTime === startTime,
+      );
+      if (dup) {
+        toast("Duplicate entry");
+        return;
+      }
+      state.timetable.push({
+        id: "t" + Date.now(),
+        subjectId,
+        day,
+        startTime,
+        endTime,
+        room,
+      });
+      selectedTTDay = day;
+      closeSheets();
+      toast("Class added");
+      renderAll();
+    }
+
+    /* ============================================================
+TOAST
+============================================================ */
+    let toastTimer;
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      document.getElementById("toast-text").textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+    }
+
+    /* init */
+    loadSavedState();
+    const savedOnboardingSettings = JSON.parse(
+      localStorage.getItem("attendx-onboarding-settings") || "null",
+    );
+    if (savedOnboardingSettings) {
+      state.settings = { ...state.settings, ...savedOnboardingSettings };
+    }
+    renderAll();
+    if (
+      localStorage.getItem(onboardingStorageKey) === "1" &&
+      state.settings.userName
+    ) {
+      document.getElementById("onboarding").classList.add("hidden");
+      showDailyGreeting();
+    } else {
+      updateOnboarding();
+    }
+  </script>
+</body>
+
+</html>
