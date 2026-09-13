@@ -1,10 +1,10 @@
-# AttendX
+# College.Logs
 
-> A modern, student-focused attendance management app built to make tracking attendance simple, fast, and stress-free.
+> Your college life, logged.
 
-AttendX is an attendance management application designed around the everyday needs of college students.
+College.Logs is a mobile-first college companion beginning with attendance management.
 
-Instead of treating attendance as a simple percentage tracker, AttendX focuses on helping students understand their attendance, identify subjects that need attention, and make better decisions about attending or missing classes.
+It helps students track attendance, understand their academic standing, and make better decisions about attending or missing classes.
 
 The current HTML prototype serves as the validated product and UX foundation for the upcoming React Native application.
 
@@ -58,7 +58,7 @@ The current HTML prototype serves as the validated product and UX foundation for
 
 ### 🧮 Attendance Decision Support
 
-AttendX goes beyond displaying percentages.
+College.Logs goes beyond displaying percentages.
 
 It helps answer questions such as:
 
@@ -115,16 +115,16 @@ A modern web browser such as:
 Clone the repository:
 
 ```
-git clone https://github.com/NTgGamer1/AttendX.git
+git clone https://github.com/NTgGamer1/college-logs.git
 ```
 
 Open the project directory:
 
 ```
-cd AttendX
+cd college-logs
 ```
 
-Then open `attendx.html` in your browser.
+Then open `college-logs.html` in your browser.
 
 No build system, package manager, backend, or API configuration is required for the current prototype.
 
@@ -133,7 +133,7 @@ No build system, package manager, backend, or API configuration is required for 
 ## 🧭 Application Structure
 
 ```
-AttendX
+College.Logs
 │
 ├── Onboarding
 │   ├── Welcome
@@ -176,7 +176,7 @@ AttendX
 
 ## 🎯 Product Philosophy
 
-AttendX is built around three principles:
+College.Logs is built around three principles:
 
 ### 1. Simple
 
@@ -196,7 +196,7 @@ The application is designed around real student questions and workflows rather t
 
 ## 🧠 Attendance Logic
 
-AttendX calculates attendance using:
+College.Logs calculates attendance using:
 
 ```
 Attendance % = (Classes Attended / Total Classes) × 100
@@ -235,7 +235,7 @@ External API
 AI API
 ```
 
-The architecture will evolve as AttendX moves toward the React Native implementation.
+The architecture will evolve as College.Logs moves toward the React Native implementation.
 
 ---
 
@@ -255,7 +255,7 @@ The next major milestone is a React Native application that will preserve the va
 
 **HTML Prototype — Completed ✅**
 
-The prototype establishes the core AttendX experience, including:
+The prototype establishes the core College.Logs experience, including:
 
 - Attendance tracking
 - Subject management
@@ -274,13 +274,13 @@ The next stage is to translate the validated prototype into a maintainable React
 
 For the complete development roadmap, milestones, implementation stages, and project progression, see:
 
-**[`DEVELOPMENT_PHASES.md`](DEVELOPMENT_PHASES.md)**
+**[`DEVELOPMENT.md`](DEVELOPMENT.md)**
 
 ---
 
 ## 🤖 AI-Assisted Development
 
-AttendX is developed with the assistance of AI tools.
+College.Logs is developed with the assistance of AI tools.
 
 AI assistance may be used for areas such as:
 
@@ -297,7 +297,7 @@ Product direction, requirements, decisions, testing, review, iteration, and fina
 
 ## 📄 License
 
-AttendX is released under the **MIT License**.
+College.Logs is released under the **MIT License**.
 
 See [`LICENSE`](LICENSE) for the complete license text.
 
@@ -305,9 +305,9 @@ See [`LICENSE`](LICENSE) for the complete license text.
 
 ## 👤 Project
 
-**AttendX**
+**College.Logs**
 
 Created by **_NtgGamer1_** : **Nikhil Maurya**
 
 GitHub:
-https://github.com/NTgGamer1/AttendX
+https://github.com/NTgGamer1/college-logs

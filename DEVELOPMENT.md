@@ -1,6 +1,6 @@
-# AttendX — Development Phases
+# College.Logs — Development Phases
 
-AttendX is being developed incrementally, using the HTML prototype as the product and UX foundation for the React Native application.
+College.Logs is being developed incrementally, using the HTML prototype as the product and UX foundation for the React Native application.
 
 ---
 
@@ -26,7 +26,7 @@ AttendX is being developed incrementally, using the HTML prototype as the produc
 
 ## Phase 1 — HTML Prototype
 
-**Goal:** Validate the complete AttendX experience before building the mobile application.
+**Goal:** Validate the complete College.Logs experience before building the mobile application.
 
 **Completed:**
 
@@ -127,7 +127,7 @@ A phase is complete when:
 
 ## Current Position
 
-**AttendX is currently at Phase 2 — Prototype Refinement.**
+**College.Logs is currently at Phase 2 — Prototype Refinement.**
 
 The next major milestone is:
 

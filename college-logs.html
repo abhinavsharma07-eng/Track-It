@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>AttendX</title>
+  <meta name="description" content="College.Logs — Your college life, logged." />
+  <title>College.Logs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -1289,8 +1290,8 @@
       <section class="view active" id="view-home">
         <div class="topbar">
           <div>
-            <h1>AttendX</h1>
-            <p id="home-greeting">Simple attendance tracking !!</p>
+            <h1>College.Logs</h1>
+            <p id="home-greeting">Your college life, logged.</p>
           </div>
           <div class="header-actions">
             <div class="icon-btn" onclick="go('settings')">
@@ -1601,7 +1602,7 @@
                 font-weight: 700;
                 font-size: 16px;
               ">
-            AttendX
+            College.Logs
           </div>
           <div style="color: var(--text-muted); font-size: 12px; margin-top: 2px">
             Version 1.0
@@ -1632,8 +1633,8 @@
     <section class="onboarding" id="onboarding" aria-label="Initial setup">
       <div class="onboarding-track" id="onboarding-track">
         <div class="onboarding-slide">
-          <div class="onboarding-mark">AX</div>
-          <h1>Welcome to AttendX</h1>
+          <div class="onboarding-mark">CL</div>
+          <h1>Welcome to College.Logs</h1>
           <p>
             Keep your attendance clear, current, and easy to act on. Let’s set
             up the basics before you begin.
@@ -1674,7 +1675,7 @@
           <div class="onboarding-mark">✓</div>
           <h1>You’re ready</h1>
           <p>
-            Add your subjects and timetable from the home screen. AttendX will
+            Add your subjects and timetable from the home screen. College.Logs will
             keep today’s classes and your progress in view.
           </p>
         </div>
@@ -1697,7 +1698,7 @@
 
     <section class="setup-reminder hidden" id="setup-reminder" aria-label="Complete setup">
       <div class="setup-reminder-card">
-        <h2 id="setup-reminder-title">Finish setting up AttendX</h2>
+        <h2 id="setup-reminder-title">Finish setting up College.Logs</h2>
         <p id="setup-reminder-message">
           Add a subject and timetable so your home screen can show your
           classes.
@@ -1871,6 +1872,8 @@ DATA MODEL — mirrors data-model.md
     let selectedTarget = 75;
     let onboardingSlide = 0;
     let onboardingTarget = 80;
+    // Legacy/internal compatibility identifiers retained to avoid breaking
+    // existing local data stored by the prior AttendX version.
     const stateStorageKey = "attendx-state";
     const onboardingStorageKey = "attendx-onboarding-complete";
     const dailyGreetingStorageKey = "attendx-last-greeting-date";
@@ -2502,7 +2505,7 @@ NAVIGATION
       document.getElementById("onboarding-back").style.display =
         onboardingSlide === 0 ? "none" : "inline-flex";
       document.getElementById("onboarding-next").textContent =
-        onboardingSlide === 2 ? "Start using AttendX" : "Continue";
+        onboardingSlide === 2 ? "Start using College.Logs" : "Continue";
     }
 
     function nextOnboardingSlide() {
