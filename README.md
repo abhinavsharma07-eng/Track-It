@@ -1,8 +1,8 @@
-# College.Logs
+# Track-It
 
-> Your college life, logged.
+> Your college life, Tracked.
 
-College.Logs is a mobile-first college companion beginning with attendance management.
+Track-It is a mobile-first college companion beginning with attendance management.
 
 It helps students track attendance, understand their academic standing, and make better decisions about attending or missing classes.
 
@@ -58,7 +58,7 @@ The current HTML prototype serves as the validated product and UX foundation for
 
 ### 🧮 Attendance Decision Support
 
-College.Logs goes beyond displaying percentages.
+Track-It goes beyond displaying percentages.
 
 It helps answer questions such as:
 
@@ -115,16 +115,16 @@ A modern web browser such as:
 Clone the repository:
 
 ```
-git clone https://github.com/NTgGamer1/college-logs.git
+git clone https://github.com/NTgGamer1/Track-It.git
 ```
 
 Open the project directory:
 
 ```
-cd college-logs
+cd Track-It
 ```
 
-Then open `college-logs.html` in your browser.
+Then open `Track-It.html` in your browser.
 
 No build system, package manager, backend, or API configuration is required for the current prototype.
 
@@ -133,7 +133,7 @@ No build system, package manager, backend, or API configuration is required for 
 ## 🧭 Application Structure
 
 ```
-College.Logs
+Track-It
 │
 ├── Onboarding
 │   ├── Welcome
@@ -176,7 +176,7 @@ College.Logs
 
 ## 🎯 Product Philosophy
 
-College.Logs is built around three principles:
+Track-It is built around three principles:
 
 ### 1. Simple
 
@@ -196,7 +196,7 @@ The application is designed around real student questions and workflows rather t
 
 ## 🧠 Attendance Logic
 
-College.Logs calculates attendance using:
+Track-It calculates attendance using:
 
 ```
 Attendance % = (Classes Attended / Total Classes) × 100
@@ -280,7 +280,7 @@ For the complete development roadmap, milestones, implementation stages, and pro
 
 ## 🤖 AI-Assisted Development
 
-College.Logs is developed with the assistance of AI tools.
+Track-It is developed with the assistance of AI tools.
 
 AI assistance may be used for areas such as:
 
@@ -297,7 +297,7 @@ Product direction, requirements, decisions, testing, review, iteration, and fina
 
 ## 📄 License
 
-College.Logs is released under the **MIT License**.
+Track-It is released under the **MIT License**.
 
 See [`LICENSE`](LICENSE) for the complete license text.
 
@@ -305,9 +305,9 @@ See [`LICENSE`](LICENSE) for the complete license text.
 
 ## 👤 Project
 
-**College.Logs**
+**Track-It**
 
 Created by **_NtgGamer1_** : **Nikhil Maurya**
 
 GitHub:
-https://github.com/NTgGamer1/college-logs
+https://github.com/NTgGamer1/Track-It/
